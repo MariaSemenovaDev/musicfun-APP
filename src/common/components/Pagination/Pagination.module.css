@@ -2,8 +2,16 @@
     display: flex;
     gap: 8px;
     justify-content: center;
-    margin-top: 24px;
 }
+
+.container {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    margin: 0 auto;
+    gap: 40px;
+}
+
 
 .pageButton {
     padding: 4px 10px;
@@ -23,3 +31,5 @@
     color: #888;
     user-select: none;
 }
+
+
