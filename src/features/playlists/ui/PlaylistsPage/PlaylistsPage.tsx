@@ -1,5 +1,6 @@
 import { useFetchPlaylistsQuery } from '@/features/playlists/api/playlistsApi.ts'
 import s from './PlaylistsPage.module.css'
+import { CreatePlaylistForm } from '@/features/playlists/ui/PlaylistsPage/CreatePlaylistForm/CreatePlaylistForm.tsx'
 
 export const PlaylistsPage = () => {
   const { data } = useFetchPlaylistsQuery()
@@ -7,6 +8,7 @@ export const PlaylistsPage = () => {
   return (
     <div>
       <h1>Playlists page</h1>
+      <CreatePlaylistForm/>
       <div className={s.items}>
         {data?.data.map(playlist => {
           return (
