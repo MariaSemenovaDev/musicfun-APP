@@ -6,13 +6,25 @@ import type { PlaylistData, UpdatePlaylistArgs } from '@/features/playlists/api/
 import { useState } from 'react'
 import { EditPlaylistForm } from '@/features/playlists/ui/PlaylistsPage/EditPlaylistForm.tsx'
 import { PlaylistItem } from '@/features/playlists/ui/PlaylistsPage/PlaylistItem.tsx'
+import { useDebounceValue } from '@/common/hooks'
+import { Pagination } from '@/common/components/Pagination/Pagination.tsx'
+
 
 export const PlaylistsPage = () => {
+
   const [playlistId, setPlaylistId] = useState<string | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [search, setSearch] = useState('')
+
+  const debounceSearch = useDebounceValue(search)
 
   const { register, handleSubmit, reset } = useForm<UpdatePlaylistArgs>()
 
-  const { data } = useFetchPlaylistsQuery()
+  const { data, isLoading } = useFetchPlaylistsQuery({
+    search: debounceSearch,
+    pageNumber: currentPage,
+    pageSize: 2,
+  })
 
   const [deletePlaylist] = useDeletePlaylistMutation()
 
@@ -39,7 +51,15 @@ export const PlaylistsPage = () => {
     <div className={s.container}>
       <h1>Playlists page</h1>
       <CreatePlaylistForm />
+
+      <input
+        type="search"
+        placeholder={'Search playlist by title'}
+        onChange={e => setSearch(e.currentTarget.value)}
+      />
+
       <div className={s.items}>
+        {!data?.data.length && !isLoading && <h2>playlists not found</h2>}
         {data?.data.map((playlist) => {
           const isEditing = playlistId === playlist.id
 
@@ -64,6 +84,12 @@ export const PlaylistsPage = () => {
           )
         })}
       </div>
+
+      <Pagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        pagesCount={data?.meta.pagesCount || 1}
+      />
     </div>
   )
 }

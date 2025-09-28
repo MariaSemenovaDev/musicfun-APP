@@ -1,15 +1,26 @@
-import type { CreatePlaylistArgs, PlaylistData, PlaylistsResponse, UpdatePlaylistArgs } from './playlistsApi.types'
+import type {
+  CreatePlaylistArgs,
+  FetchPlaylistsArgs,
+  PlaylistData,
+  PlaylistsResponse,
+  UpdatePlaylistArgs
+} from './playlistsApi.types'
 import { baseApi } from '@/app/api/baseApi.ts'
 import type { Images } from '@/common/types'
 
 export const playlistsApi = baseApi.injectEndpoints({
-  endpoints: build => ({
-    fetchPlaylists: build.query<PlaylistsResponse, void>({
-      query: () => `playlists`,
+  endpoints: (build) => ({
+    fetchPlaylists: build.query<PlaylistsResponse, FetchPlaylistsArgs>({
+      query: (params) => {
+        return {
+          url: 'playlists',
+          params
+        }
+      },
       providesTags: ['Playlist'],
     }),
     createPlaylist: build.mutation<{ data: PlaylistData }, CreatePlaylistArgs>({
-      query: body => ({
+      query: (body) => ({
         url: 'playlists',
         method: 'post',
         body,
@@ -17,11 +28,10 @@ export const playlistsApi = baseApi.injectEndpoints({
       invalidatesTags: ['Playlist'],
     }),
     deletePlaylist: build.mutation<void, string>({
-      query: (playlistId) =>
-        ({
-          url: `playlists/${playlistId}`,
-          method: 'delete',
-        }),
+      query: (playlistId) => ({
+        url: `playlists/${playlistId}`,
+        method: 'delete',
+      }),
       invalidatesTags: ['Playlist'],
     }),
     updatePlaylist: build.mutation<void, { playlistId: string; body: UpdatePlaylistArgs }>({
@@ -32,9 +42,8 @@ export const playlistsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Playlist'],
     }),
-    uploadPlaylistCover: build.mutation<Images, {playlistId: string; file: File}>({
+    uploadPlaylistCover: build.mutation<Images, { playlistId: string; file: File }>({
       query: ({ playlistId, file }) => {
-
         const formData = new FormData()
         formData.append('file', file)
 
@@ -46,9 +55,8 @@ export const playlistsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ['Playlist'],
     }),
-    deletePlaylistCover: build.mutation<void, {playlistId: string}>({
+    deletePlaylistCover: build.mutation<void, { playlistId: string }>({
       query: ({ playlistId }) => {
-
         return {
           url: `playlists/${playlistId}/images/main`,
           method: 'delete',
