@@ -5,6 +5,13 @@ import { type ChangeEvent, useState } from 'react'
 import { useDebounceValue } from '@/common/hooks'
 import { Pagination } from '@/common/components/Pagination/Pagination.tsx'
 import { PlaylistList } from '@/features/playlists/ui/PlaylistsPage/PlaylistList/PlaylistList.tsx'
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css';
+import CardListSkeleton, {
+  SkeletonCard
+} from '@/features/playlists/ui/PlaylistsPage/SkeletonCard/SkeletonCard.tsx'
+import { LinearProgress } from '@/common/components/LinearProgress/LinearProgress.tsx'
+
 
 export const PlaylistsPage = () => {
   const [currentPage, setCurrentPage] = useState(1)
@@ -13,13 +20,16 @@ export const PlaylistsPage = () => {
 
   const debounceSearch = useDebounceValue(search)
 
-  const { data, isLoading } = useFetchPlaylistsQuery(
+  const { data, isLoading, isFetching } = useFetchPlaylistsQuery(
     {
       search: debounceSearch,
       pageNumber: currentPage,
       pageSize,
     },
   )
+
+  console.log({ isLoading, isFetching })
+
   const changePageSizeHandler = (size: number) => {
     setPageSize(size)
     setCurrentPage(1)
@@ -30,6 +40,16 @@ export const PlaylistsPage = () => {
     setCurrentPage(1)
   }
 
+  if (isLoading)   return (
+    <SkeletonTheme baseColor="#ddd" highlightColor="#eee">
+      <div style={{ display: "flex", gap: 20 , marginTop: 40, marginLeft: 20}}>
+        <SkeletonCard />
+        <SkeletonCard />
+      </div>
+    </SkeletonTheme>
+  );
+
+
   return (
     <div className={s.container}>
       <h1>Playlists page</h1>
@@ -38,7 +58,7 @@ export const PlaylistsPage = () => {
       <input type="search" placeholder={'Search playlist by title'} onChange={searchPlaylistHandler} />
 
       <PlaylistList playlists={data?.data || []} isPlaylistsLoading={isLoading} />
-
+      {isFetching && <LinearProgress />}
       <Pagination
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
