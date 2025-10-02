@@ -40,6 +40,28 @@ export const playlistsApi = baseApi.injectEndpoints({
         method: 'put',
         body,
       }),
+      async onQueryStarted({ playlistId, body }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          playlistsApi.util.updateQueryData(
+            // название эндпоинта, в котором нужно обновить кэш
+            'fetchPlaylists',
+            // аргументы для эндпоинта
+            { pageNumber: 1, pageSize: 4, search: '' },
+            // `updateRecipe` - коллбэк для обновления закэшированного стейта мутабельным образом
+            state => {
+              const index = state.data.findIndex(playlist => playlist.id === playlistId)
+              if (index !== -1) {
+                state.data[index].attributes = { ...state.data[index].attributes, ...body }
+              }
+            }
+          )
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.undo()
+        }
+      },
       invalidatesTags: ['Playlist'],
     }),
     uploadPlaylistCover: build.mutation<Images, { playlistId: string; file: File }>({

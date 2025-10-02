@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { EditPlaylistForm } from '@/features/playlists/ui/PlaylistsPage/EditPlaylistForm.tsx'
+import { EditPlaylistForm } from '@/features/playlists/ui/PlaylistsPage/EditPlaylistForm/EditPlaylistForm.tsx'
 import { PlaylistItem } from '@/features/playlists/ui/PlaylistsPage/PlaylistItem.tsx'
 import s from './PlaylistsList.module.css'
 import type { PlaylistData, UpdatePlaylistArgs } from '@/features/playlists/api/playlistsApi.types.ts'
