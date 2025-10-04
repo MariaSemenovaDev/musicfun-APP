@@ -9,7 +9,7 @@ export const Login = () => {
     const redirectUri = import.meta.env.VITE_DOMAIN_ADDRESS + Path.OAuthRedirect
 
     // Создаем URL endpoint OAuth авторизации, добавляя callbackUrl как параметр запроса
-    const url = `${import.meta.env.VITE_BASE_URL}auth/oauth-redirect?callbackUrl=${redirectUri}`
+    const url = `${import.meta.env.VITE_BASE_URL}/auth/oauth-redirect?callbackUrl=${redirectUri}`
 
     // Открываем всплывающее окно для OAuth авторизации
     window.open(url, 'oauthPopup', 'width=500, height=600')
