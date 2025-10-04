@@ -7,8 +7,9 @@ import { Pagination } from '@/common/components/Pagination/Pagination.tsx'
 import { PlaylistList } from '@/features/playlists/ui/PlaylistsPage/PlaylistList/PlaylistList.tsx'
 import { SkeletonTheme } from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import { SkeletonCard } from '@/features/playlists/ui/PlaylistsPage/SkeletonCard/SkeletonCard.tsx'
+import { SkeletonCard } from '@/common/components/Skeletons/SkeletonCard/SkeletonCard.tsx'
 import { toast } from 'react-toastify'
+import { Skeleton } from '@/common/components/Skeletons/SkeletonTheme/Skeleton.tsx'
 
 export const PlaylistsPage = () => {
   const [currentPage, setCurrentPage] = useState(1)
@@ -35,20 +36,11 @@ export const PlaylistsPage = () => {
     setCurrentPage(1)
   }
 
-  if (isLoading)
-    return (
-      <SkeletonTheme baseColor="#ddd" highlightColor="#eee">
-        <div style={{ display: 'flex', gap: 20, marginTop: 40, marginLeft: 20 }}>
-          <SkeletonCard />
-          <SkeletonCard />
-        </div>
-      </SkeletonTheme>
-    )
-
+  if (isLoading) return <Skeleton/>
   return (
     <div className={s.container}>
       <h1>Playlists page</h1>
-      <CreatePlaylistForm />
+
 
       <input type="search" placeholder={'Search playlist by title'} onChange={searchPlaylistHandler} />
 
