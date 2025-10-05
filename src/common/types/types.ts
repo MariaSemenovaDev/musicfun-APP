@@ -20,7 +20,8 @@
 //   url: string
 // }
 
-import { coverSchema, currentUserReactionSchema, imagesSchema, type tagSchema, userSchema } from '../schemas/schemas'
+import { coverSchema, currentUserReactionSchema, imagesSchema, type tagSchema, userSchema } from '@/common/schemas'
+import z from 'zod'
 
 export type Tag = z.infer<typeof tagSchema>
 export type User = z.infer<typeof userSchema>
