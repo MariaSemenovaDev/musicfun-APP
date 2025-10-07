@@ -1,0 +1,66 @@
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 300px;
+    height: 100vh;
+    background-color: #fff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    transition: left 0.3s ease;
+    z-index: 1000;
+    padding: 16px 24px;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.background {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 999;
+}
+
+/* навигация */
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 45px;
+    padding-left: 46px;
+}
+
+.nav a {
+    font-weight: 600;
+    font-size: 22px;
+    color: #000;
+    text-decoration: none;
+}
+
+.nav a:hover {
+    text-decoration: underline;
+}
+
+.nav a.active {
+    color: #0059b2;
+}
+
+/* кнопка закрытия */
+.close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
+}
+
+/* кнопка открытия (бургер) */
+.burger {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1100;
+}

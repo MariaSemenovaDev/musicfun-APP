@@ -1,8 +1,8 @@
 import type {
   CreatePlaylistArgs,
-  FetchPlaylistsArgs,
+  FetchPlaylistsArgs, PlaylistCreatedEvent,
   PlaylistData,
-  PlaylistsResponse,
+  PlaylistsResponse, PlaylistUpdatedEvent,
   UpdatePlaylistArgs
 } from './playlistsApi.types'
 import { baseApi } from '@/app/api/baseApi.ts'
@@ -11,6 +11,9 @@ import { playlistCreateResponseSchema, playlistsResponseSchema } from '@/feature
 import { errorToast } from '@/common/utils'
 import { imagesSchema } from '@/common/schemas'
 import { withZodCatch } from '@/common/utils/withZodCatch.ts'
+import { io, Socket } from 'socket.io-client'
+import { SOCKET_EVENTS } from '@/common/constants'
+import { subscribeToEvent } from '@/common/socket/subscribeToEvent.ts'
 
 export const playlistsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -23,6 +26,35 @@ export const playlistsApi = baseApi.injectEndpoints({
       },
       ...withZodCatch(playlistsResponseSchema),
       skipSchemaValidation: process.env.NODE_ENV === 'production',
+      keepUnusedDataFor: 0, // 👈 очистка сразу после размонтирования
+      async onCacheEntryAdded(_arg, { updateCachedData, cacheDataLoaded, cacheEntryRemoved }) {
+        // Ждем разрешения начального запроса перед продолжением
+        await cacheDataLoaded
+
+        const unsubscribes = [
+          subscribeToEvent<PlaylistCreatedEvent>(SOCKET_EVENTS.PLAYLIST_CREATED, msg => {
+            const newPlaylist = msg.payload.data
+            updateCachedData(state => {
+              state.data.pop()
+              state.data.unshift(newPlaylist)
+              state.meta.totalCount = state.meta.totalCount + 1
+              state.meta.pagesCount = Math.ceil(state.meta.totalCount / state.meta.pageSize)
+            })
+          }),
+          subscribeToEvent<PlaylistUpdatedEvent>(SOCKET_EVENTS.PLAYLIST_UPDATED, msg => {
+            const newPlaylist = msg.payload.data
+            updateCachedData(state => {
+              const index = state.data.findIndex(playlist => playlist.id === newPlaylist.id)
+              if (index !== -1) {
+                state.data[index] = { ...state.data[index], ...newPlaylist }
+              }
+            })
+          }),
+        ]
+        // CacheEntryRemoved разрешится, когда подписка на кеш больше не активна
+        await cacheEntryRemoved
+        unsubscribes.forEach(unsubscribe => unsubscribe())
+      },
       providesTags: ['Playlist'],
     }),
     createPlaylist: build.mutation<{ data: PlaylistData }, CreatePlaylistArgs>({

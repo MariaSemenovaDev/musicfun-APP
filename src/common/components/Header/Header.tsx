@@ -3,15 +3,20 @@ import { Link, NavLink } from 'react-router'
 import s from './Header.module.css'
 import { useGetMeQuery, useLogoutMutation } from '@/features/auth/api/authApi.ts'
 import { Login } from '@/features/auth/ui/ProfilePage/Login/Login.tsx'
+import type { FC } from 'react'
 
-const navItems = [
-  { to: Path.Main, label: 'Main' },
-  { to: Path.Playlists, label: 'Playlists' },
-  { to: Path.Tracks, label: 'Tracks' },
-  //{ to: Path.Profile, label: 'Profile' },
-]
+// const navItems = [
+//   { to: Path.Main, label: 'Main' },
+//   { to: Path.Playlists, label: 'Playlists' },
+//   { to: Path.Tracks, label: 'Tracks' },
+//   //{ to: Path.Profile, label: 'Profile' },
+// ]
 
-export const Header = () => {
+type PropsType = {
+  handleOpen: () => void
+}
+
+export const Header: FC<PropsType> = ({handleOpen}) => {
   const { data } = useGetMeQuery()
   const [logout] = useLogoutMutation()
 
@@ -19,18 +24,13 @@ export const Header = () => {
 
   return (
     <header className={s.container}>
-      <nav>
-        <ul className={s.list}>
-          {navItems.map((item) => (
-            <li key={item.to}>
-              <NavLink to={item.to} className={({ isActive }) => `link ${isActive ? s.activeLink : ''}`}>
-                {item.label}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
+      <img
+        src={''}
+        id={'hw5-burger-menu'}
+        className={s.burgerMenuIcon}
+        onClick={handleOpen}
+        alt={'open menu'}
+      />
       {data && (
         <div className={s.loginContainer}>
           <Link to={Path.Profile}>{data.login}</Link>
