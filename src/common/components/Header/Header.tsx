@@ -1,5 +1,5 @@
 import { Path } from '@/common/routing'
-import { Link, NavLink } from 'react-router'
+import { Link } from 'react-router'
 import s from './Header.module.css'
 import { useGetMeQuery, useLogoutMutation } from '@/features/auth/api/authApi.ts'
 import { Login } from '@/features/auth/ui/ProfilePage/Login/Login.tsx'

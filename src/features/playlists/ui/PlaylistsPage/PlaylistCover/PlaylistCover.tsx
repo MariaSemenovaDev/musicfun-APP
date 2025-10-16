@@ -1,4 +1,3 @@
-import React, { type ChangeEvent } from 'react'
 import s from './PlaylistCover.module.css'
 import defaultCover from '@/assets/images/default-playlist-cover.png'
 import {
@@ -7,6 +6,7 @@ import {
 } from '@/features/playlists/api/playlistsApi.ts'
 import type { Images } from '@/common/types'
 import { errorToast } from '@/common/utils'
+import type { ChangeEvent } from 'react'
 
 type Props = {
   playlistId: string,

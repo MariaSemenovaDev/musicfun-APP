@@ -13,7 +13,6 @@ export const ProfilePage = () => {
   const {
     data: playlistsResponse,
     isLoading,
-    error,
   } = useFetchPlaylistsQuery({ userId: meResponse?.userId }, { skip: !meResponse?.userId })
 
   if (isLoading || isMeLoading) return <Skeleton />

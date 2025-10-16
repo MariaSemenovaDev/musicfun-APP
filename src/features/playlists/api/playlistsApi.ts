@@ -8,10 +8,8 @@ import type {
 import { baseApi } from '@/app/api/baseApi.ts'
 import type { Images } from '@/common/types'
 import { playlistCreateResponseSchema, playlistsResponseSchema } from '@/features/playlists/model/playlists.schemas.ts'
-import { errorToast } from '@/common/utils'
 import { imagesSchema } from '@/common/schemas'
 import { withZodCatch } from '@/common/utils/withZodCatch.ts'
-import { io, Socket } from 'socket.io-client'
 import { SOCKET_EVENTS } from '@/common/constants'
 import { subscribeToEvent } from '@/common/socket/subscribeToEvent.ts'
 

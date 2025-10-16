@@ -1,4 +1,3 @@
-import React from 'react'
 import { SkeletonCard } from '@/common/components/Skeletons/SkeletonCard/SkeletonCard.tsx'
 import { SkeletonTheme } from 'react-loading-skeleton'
 

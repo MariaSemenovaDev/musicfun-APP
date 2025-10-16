@@ -6,6 +6,7 @@ import {
   trackRelationshipsSchema,
   tracksIncludedSchema, tracksMetaSchema
 } from '../model/tracks.schemas'
+import { z } from 'zod'
 
 export type TrackAttachment = z.infer<typeof trackAttachmentSchema>
 export type TrackRelationships = z.infer<typeof trackRelationshipsSchema>

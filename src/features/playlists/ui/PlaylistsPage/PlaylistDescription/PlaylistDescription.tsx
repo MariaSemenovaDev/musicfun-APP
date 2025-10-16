@@ -1,4 +1,3 @@
-import React, { type Attributes } from 'react'
 import type { PlaylistAttributes } from '@/features/playlists/api/playlistsApi.types.ts'
 
 type Props = {

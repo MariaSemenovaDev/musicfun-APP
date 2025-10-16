@@ -1,7 +1,7 @@
-import React, { FC, useEffect } from 'react'
 import s from './Sidebar.module.css'
 import { Path } from '@/common/routing'
-import { NavLink } from 'react-router' // оставил как у тебя
+import { NavLink } from 'react-router'
+import type { FC } from 'react' // оставил как у тебя
 
 const navItems = [
   { to: Path.Main, label: 'Main' },

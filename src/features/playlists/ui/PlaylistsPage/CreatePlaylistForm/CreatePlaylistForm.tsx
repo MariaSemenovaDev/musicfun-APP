@@ -15,7 +15,7 @@ export const CreatePlaylistForm = () => {
     resolver: zodResolver(createPlaylistSchema),
   })
 
-  const [createPlaylist, { data }] = useCreatePlaylistMutation()
+  const [createPlaylist] = useCreatePlaylistMutation()
 
   const onSubmit: SubmitHandler<CreatePlaylistArgs> = (data) => {
     //в data - наши title и description
